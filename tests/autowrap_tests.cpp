@@ -45,14 +45,15 @@ public:
     }
 
     // And now, totally magical, the use of variadic function arguments in concert with type macros
-    // See https://stackoverflow.com/a/9103132/1360263 for information about passing the reference
+    // See https://stackoverflow.com/a/9103132/1360263 for information about passing the reference for add_inplace
     #define X(name) template<class ...Args> name ## _RETURNS name(Args&&... args){ return wrap.getAddress<name ## _TYPE>(#name)(std::forward<Args>(args)...); };
         LIST_OF_METHOD_NAMES
     #undef X
 };
 
 int main(){
-    for (auto load_method: {AbstractSharedLibraryWrapper::FROM_FILE, AbstractSharedLibraryWrapper::LOAD_LIBRARY})
+    for (auto load_method: {AbstractSharedLibraryWrapper::FROM_FILE, 
+                            AbstractSharedLibraryWrapper::LOAD_LIBRARY})
     {
         Shim shim("Debug/so.dll", load_method);
         std::cout << shim.add_superhard(2.0, 3.0) << std::endl; 
