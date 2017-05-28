@@ -1,0 +1,7 @@
+cmake_minimum_required(VERSION 2.8)
+include_directories("${CMAKE_SOURCE_DIR}/externals/MemoryModule")
+include_directories("${CMAKE_SOURCE_DIR}/include")
+add_library(so SHARED "${CMAKE_SOURCE_DIR}/sample_so/so.cpp")
+add_library(MemoryModuleLib STATIC "${CMAKE_SOURCE_DIR}/externals/MemoryModule/MemoryModule.c")
+add_executable(simple_test "${CMAKE_SOURCE_DIR}/tests/simple_tests.cpp")
+target_link_libraries(simple_test MemoryModuleLib)
