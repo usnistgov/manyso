@@ -14,7 +14,7 @@ public:
     REFPROPWrap(const std::string &path, AbstractSharedLibraryWrapper::load_method method) : wrap(WindowsSharedLibraryWrapper(path, method)) {  };
 
     // And now, totally magical, the use of variadic function arguments in concert with type macros
-    // See https://stackoverflow.com/a/9103132/1360263 for information about passing the reference for add_inplace
+    // Add many methods, each corresponding to a 1-to-1 wrapper of a function from the shared library
     #define X(name) template<class ...Args> void name(Args&&... args){ return wrap.getAddress<name ## _POINTER>(#name)(std::forward<Args>(args)...); };
         LIST_OF_REFPROP_FUNCTION_NAMES
     #undef X
