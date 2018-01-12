@@ -1,13 +1,19 @@
 
 ## Introduction
 
-A tool for loading multiple copies of a DLL/SO in memory at the same time
+A tool for loading multiple copies of a DLL/SO in memory at the same time.  In practice this interface is designed to work with the REFPROP library, but it provides a generic interface that can be used with a wide range of shared libraries.
 
-Derived from https://github.com/fancycode/MemoryModule
+Based upon https://github.com/fancycode/MemoryModule
 
-## LICENSE
+Windows only currently, *nix support is upcoming
 
-MPL v2.0, because MemoryModule is licensed with MPL v2.0
+## Contact
+
+Code of ``manyso`` written by Ian Bell, with help from Tobias Loew.  Please open an issue on github for assistance: https://github.com/usnistgov/manyso/issues/new
+
+## License
+
+MemoryModule is licensed with MPL v2.0, manyso is in the public domain.  Please see LICENSE.txt for more information.
 
 ## Build/run
 
