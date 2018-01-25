@@ -5,7 +5,7 @@ A tool for loading multiple copies of a DLL/SO in memory at the same time.  In p
 
 Based upon https://github.com/fancycode/MemoryModule
 
-Windows only currently, *nix support is upcoming
+Works on windows and linux
 
 ## Contact
 

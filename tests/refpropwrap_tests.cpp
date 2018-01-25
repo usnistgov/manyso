@@ -1,17 +1,19 @@
-#include "manyso/windows/windows.h"
+#include "manyso/native.h"
 #include "manyso/exceptions.h"
+#include "manyso/platform.h"
 
 #include <string>
 #include <iostream>
 #include <chrono>
+#include <cstring>
 
 #include "REFPROP_lib.h"
 
 class REFPROPWrap{
 private:
-    WindowsSharedLibraryWrapper wrap;
+    NativeSharedLibraryWrapper wrap;
 public:
-    REFPROPWrap(const std::string &path, AbstractSharedLibraryWrapper::load_method method) : wrap(WindowsSharedLibraryWrapper(path, method)) {  };
+    REFPROPWrap(const std::string &path, AbstractSharedLibraryWrapper::load_method method) : wrap(NativeSharedLibraryWrapper(path, method)) {  };
 
     // And now, totally magical, the use of variadic function arguments in concert with type macros
     // Add many methods, each corresponding to a 1-to-1 wrapper of a function from the shared library
@@ -21,14 +23,20 @@ public:
 };
 
 int main(){
-    for (auto load_method: {AbstractSharedLibraryWrapper::LOAD_LIBRARY})
+    for (auto load_method: {AbstractSharedLibraryWrapper::LOAD_LIBRARY, AbstractSharedLibraryWrapper::FROM_FILE })
     {
-        REFPROPWrap wrap("REFPRP64.dll", load_method);
+#if defined(__MANYSOISWINDOWS__)
+        std::string root = "D:/Code/REFPROP-cmake/build/10/Release/";
+#else
+        std::string root = std::string(std::getenv("RPPREFIX"));
+#endif
+        REFPROPWrap wrap(root+"librefprop.so", load_method);
         
-        //char path[255] = "c:/Program Files (x86)/REFPROP/";
-        //wrap.SETPATHdll(path, 255); 
+        char path[255];
+        strcpy(path, root.c_str());
+        wrap.SETPATHdll(path, 255); 
 
-        long nc = 1, ierr = 0;
+        int nc = 1, ierr = 0;
         char herr[255], hfld[10000] = "CO2.FLD", hmx[255] = "HMX.BNC", href[4] = "DEF";
         
         wrap.SETUPdll(nc, hfld, hmx, href, ierr, herr, 10000, 255, 3, 255);
