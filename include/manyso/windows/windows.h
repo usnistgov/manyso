@@ -39,12 +39,14 @@ private:
         if (pSize == 0)
         {
             fclose(fp);
+            throw std::range_error("Unable to determine the size of the file by calling ftell()");
             return NULL;
         }
 
         result = (unsigned char *)malloc(pSize);
         if (result == NULL)
         {
+            throw std::range_error("Unable to allocate a blob of memory of "+std::to_string(static_cast<int>(pSize))+" bytes.");
             return NULL;
         }
 
@@ -54,6 +56,7 @@ private:
         if (read != pSize)
         {
             free(result);
+            throw std::range_error("Size of blob read in ["+std::to_string(read)+"] not equal to expected size [" + std::to_string(static_cast<int>(pSize)) + "].");
             return NULL;
         }
 
