@@ -34,7 +34,7 @@ public:
         }
     };
     void unload() {
-        std::cout << "freeing library" << std::endl;
+        // std::cout << "freeing library" << std::endl;
         free_library();
     };
     void lock(load_method method) {
