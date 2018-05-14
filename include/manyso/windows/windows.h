@@ -78,6 +78,7 @@ protected:
         lock(load_method::LOAD_LIBRARY);
     };
     void free_library() override {
+        if (handle == 0){ return; }
         switch (m_load_method) {
         case LOAD_LIBRARY:
             FreeLibrary(static_cast<HMODULE>(handle)); break;
@@ -101,7 +102,7 @@ public:
     WindowsSharedLibraryWrapper(const std::string &path, load_method method = SYSTEM_DEFAULT) {
         load(path, method);
     };
-    ~WindowsSharedLibraryWrapper() {
+    virtual ~WindowsSharedLibraryWrapper() {
         unload();
     };
 };

@@ -19,6 +19,7 @@ protected:
     virtual void free_library() = 0;
     virtual void* get_method_pointer(const std::string &method_name) = 0;
 public:
+    virtual ~AbstractSharedLibraryWrapper() {};
     void load(const std::string &path, load_method method) {
         if (m_islocked) {
             throw InvalidLoad("Class has already been intialized, cannot reinitialize", 0);

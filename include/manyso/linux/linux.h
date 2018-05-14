@@ -32,7 +32,7 @@ public:
     LinuxSharedLibraryWrapper(const std::string &path, load_method method = SYSTEM_DEFAULT) {
         load(path, method);
     };
-    ~LinuxSharedLibraryWrapper() {
+    virtual ~LinuxSharedLibraryWrapper() {
         unload();
     };
 };
