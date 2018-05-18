@@ -14,16 +14,20 @@ protected:
         throw InvalidLoad("Loading from file not supported on linux", 0); 
     };
     void load_library(const std::string &file_path) override {
-        handle = dlmopen(LM_ID_NEWLM, file_path.c_str(), RTLD_NOW);
-        if (handle == NULL){
+        handle = dlmopen(LM_ID_NEWLM, file_path.c_str(), RTLD_NOW | );
+        if (handle == nullptr){
             std::string err(dlerror());
             throw InvalidLoad("Could not load library from the path:"+file_path+" with error: "+err, 0);
         }
         lock(load_method::LOAD_LIBRARY);
     };
     void free_library() override {
-        dlclose (handle);
-        handle = NULL;
+        int retcode = dlclose (handle);
+        if (retcode != 0){
+            std::string err(dlerror());
+            throw InvalidUnload("Could not unload library with error: "+err, 0);
+        }
+        handle = nullptr;
     };
     void* get_method_pointer(const std::string &method_name) override {
         return dlsym(handle, method_name.c_str());
