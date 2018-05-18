@@ -14,7 +14,7 @@ protected:
         throw InvalidLoad("Loading from file not supported on linux", 0); 
     };
     void load_library(const std::string &file_path) override {
-        handle = dlmopen(LM_ID_NEWLM, file_path.c_str(), RTLD_NOW | );
+        handle = dlmopen(LM_ID_NEWLM, file_path.c_str(), RTLD_NOW | RTLD_LOCAL | RTLD_DEEPBIND);
         if (handle == nullptr){
             std::string err(dlerror());
             throw InvalidLoad("Could not load library from the path:"+file_path+" with error: "+err, 0);
