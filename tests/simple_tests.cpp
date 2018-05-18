@@ -1,4 +1,4 @@
-#include "manyso/windows/windows.h"
+#include "manyso/native.h"
 #include "manyso/exceptions.h"
 
 #include <string>
