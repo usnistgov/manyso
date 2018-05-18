@@ -70,6 +70,7 @@ protected:
             return;
         }
         handle = MemoryLoadLibrary(data, psize);
+        free(data);
         lock(load_method::FROM_FILE);
     };
     void load_library(const std::string &file_path) override {
