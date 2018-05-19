@@ -73,6 +73,9 @@ protected:
         free(data);
         lock(load_method::FROM_FILE);
     };
+    void load_library_pristine(const std::string &file_path) override {
+        throw InvalidLoad("Pristine option not suppoorted on windows", 0);
+    }; 
     void load_library(const std::string &file_path) override {
         auto cfile_path = TEXT(file_path.c_str());
         handle = LoadLibrary(cfile_path);

@@ -9,13 +9,14 @@
 
 class AbstractSharedLibraryWrapper {
 public:
-    enum load_method { SYSTEM_DEFAULT = 0, FROM_FILE, LOAD_LIBRARY };
+    enum load_method { SYSTEM_DEFAULT = 0, FROM_FILE, LOAD_LIBRARY, LOAD_LIBRARY_PRISTINE };
 protected:
     void* handle = NULL;
     load_method m_load_method;
     bool m_islocked = false;
     virtual void load_from_file(const std::string &path) = 0;
     virtual void load_library(const std::string &path) = 0;
+    virtual void load_library_pristine(const std::string &path) = 0;
     virtual void free_library() = 0;
     virtual void* get_method_pointer(const std::string &method_name) = 0;
 public:
@@ -29,6 +30,8 @@ public:
             load_from_file(path); return;
         case LOAD_LIBRARY:
             load_library(path); return;
+        case LOAD_LIBRARY_PRISTINE:
+            load_library_pristine(path); return;
         default:
             throw InvalidLoad("Can't load", 0);
         }
