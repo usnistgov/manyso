@@ -6,6 +6,7 @@
 #if !defined(__MANYSOISWINDOWS__)
 
 #include <dlfcn.h>
+#include <link.h>
 
 class LinuxSharedLibraryWrapper : public AbstractSharedLibraryWrapper
 {
