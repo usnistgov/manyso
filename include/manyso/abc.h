@@ -4,10 +4,13 @@
 #include <string>
 #include <iostream>
 #include <tuple>
+#include <map>
 
 #include "manyso/exceptions.h"
 
 class AbstractSharedLibraryWrapper {
+private:
+    std::map<std::string, void*> pointers;
 public:
     enum load_method { SYSTEM_DEFAULT = 0, FROM_FILE, LOAD_LIBRARY, LOAD_LIBRARY_PRISTINE };
 protected:
@@ -18,7 +21,7 @@ protected:
     virtual void load_library(const std::string &path) = 0;
     virtual void load_library_pristine(const std::string &path) = 0;
     virtual void free_library() = 0;
-    virtual void* get_method_pointer(const std::string &method_name) = 0;
+    virtual void* _get_method_pointer(const std::string &method_name) = 0;
 public:
     virtual ~AbstractSharedLibraryWrapper() {};
     void load(const std::string &path, load_method method) {
@@ -51,7 +54,7 @@ public:
     };
     template < class retT>
     retT getAddress(const std::string &method_name) {
-        void * ptr = get_method_pointer(method_name);
+        void * ptr = _get_method_pointer(method_name);
         if (ptr == NULL) {
             throw InvalidLoad("Unable to load the method: " + method_name, 0);
         }
@@ -59,6 +62,29 @@ public:
             return (retT)(ptr);
         };
     }
+    /**
+    In parallel execution, multiple calls to dlsym, particularly when multiple threads are all
+    trying to call dlsym, can result in threads needing to wait.  dlsym appearrs to be
+    single-threaded, so that's not good.  But what we can do is to cache the pointers, so
+    that dlsym only gets called as needed, and a map lookup is used (rather than a call
+    to dlsym) in order to resolve the pointer.  Massive speedup in code
+    */
+    void* get_method_pointer(const std::string &method_name) 
+    {
+        if (pointers.find(method_name) == pointers.end()){
+            auto itr = pointers.end();
+            bool good_insert;
+            std::tie(itr, good_insert) = pointers.emplace(
+                std::piecewise_construct,
+                std::forward_as_tuple(method_name),
+                std::forward_as_tuple(_get_method_pointer(method_name))
+            );
+            return itr->second;
+        }
+        else{
+            return pointers[method_name];
+        }
+    };
 };
 
 #endif

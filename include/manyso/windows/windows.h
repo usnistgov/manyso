@@ -92,7 +92,7 @@ protected:
             throw InvalidUnload("Can't unload library", 0);
         }
     };
-    void* get_method_pointer(const std::string &method_name) override {
+    void* _get_method_pointer(const std::string &method_name) override {
         switch (m_load_method) {
         case LOAD_LIBRARY:
             return GetProcAddress(static_cast<HMODULE>(handle), method_name.c_str());

@@ -40,7 +40,7 @@ protected:
         }
         handle = nullptr;
     };
-    void* get_method_pointer(const std::string &method_name) override {
+    void* _get_method_pointer(const std::string &method_name) override {
         return dlsym(handle, method_name.c_str());
     };
 public:
