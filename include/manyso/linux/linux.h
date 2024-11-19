@@ -6,7 +6,9 @@
 #if !defined(__MANYSOISWINDOWS__)
 
 #include <dlfcn.h>
+#if !defined(__APPLE__)
 #include <link.h>
+#endif
 
 class LinuxSharedLibraryWrapper : public AbstractSharedLibraryWrapper
 {
@@ -22,6 +24,7 @@ protected:
         }
         lock(load_method::LOAD_LIBRARY);
     };
+#if defined(__APPLE__)
     void load_library_pristine(const std::string &file_path) override {
   
         handle = dlmopen(LM_ID_NEWLM, file_path.c_str(), RTLD_NOW | RTLD_LOCAL | RTLD_DEEPBIND);
@@ -31,6 +34,11 @@ protected:
         }
         lock(load_method::LOAD_LIBRARY_PRISTINE);
     };
+#else
+    void load_library_pristine(const std::string &file_path) override {
+        throw InvalidLoad("Could not load library from the path:"+file_path+" on APPLE arch", 0);
+    };
+#endif
     void free_library() override {
 	// Both methods free in the same way
         int retcode = dlclose (handle);
