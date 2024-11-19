@@ -24,7 +24,7 @@ protected:
         }
         lock(load_method::LOAD_LIBRARY);
     };
-#if defined(__APPLE__)
+#if !defined(__APPLE__)
     void load_library_pristine(const std::string &file_path) override {
   
         handle = dlmopen(LM_ID_NEWLM, file_path.c_str(), RTLD_NOW | RTLD_LOCAL | RTLD_DEEPBIND);
