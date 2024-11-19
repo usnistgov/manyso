@@ -13,7 +13,7 @@
 class LinuxSharedLibraryWrapper : public AbstractSharedLibraryWrapper
 {
 protected:
-    virtual void load_from_file(const std::string &path) override{ 
+    void load_from_file(const std::string &path) override{ 
         throw InvalidLoad("Loading from file not supported on linux", 0); 
     };
     void load_library(const std::string &file_path) override {
