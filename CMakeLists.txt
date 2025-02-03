@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 2.8)
+project(manyso)
 
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/externals/REFPROP-headers")
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/include")
@@ -10,6 +11,7 @@ add_executable(autowrap_test "${CMAKE_CURRENT_SOURCE_DIR}/tests/autowrap_tests.c
 add_executable(refpropwrap_test "${CMAKE_CURRENT_SOURCE_DIR}/tests/refpropwrap_tests.cpp")
 
 if (WIN32)
+  set(TESTSUITE TRUE CACHE BOOL "Compile MemoryModule with TESTSUITE support")
   add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/externals/MemoryModule")
   target_link_libraries(simple_test MemoryModule)
   target_link_libraries(autowrap_test MemoryModule)
