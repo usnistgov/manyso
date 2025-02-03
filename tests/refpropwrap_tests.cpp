@@ -36,7 +36,7 @@ int main(){
         strcpy(path, root.c_str());
         wrap.SETPATHdll(path, 255); 
 
-        int nc = 1, ierr = 0;
+        long nc = 1, ierr = 0;
         char herr[255], hfld[10000] = "CO2.FLD", hmx[255] = "HMX.BNC", href[4] = "DEF";
         
         wrap.SETUPdll(nc, hfld, hmx, href, ierr, herr, 10000, 255, 3, 255);
